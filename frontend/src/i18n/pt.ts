@@ -47,6 +47,7 @@ const translations = {
   "Valid": "Válido",
   "Error": "Erro",
   "Validating...": "Validando...",
+  "Optional": "Opcional"
 };
 
 export default translations;

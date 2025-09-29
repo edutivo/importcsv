@@ -81,7 +81,7 @@ export type CSVImporterProps = {
   importerKey?: string;        // For backend mode
   
   // Required callback
-  onComplete?: (data: any) => void;
+  onComplete?: (data: any) => void | Promise<any>;
   
   // Optional configuration
   backendUrl?: string;         // API endpoint (default from config)
@@ -113,6 +113,8 @@ export type CSVImporterProps = {
   showDownloadTemplateButton?: boolean;
   skipHeaderRowSelection?: boolean;
   waitOnComplete?: boolean;
+
+  customProcessing?: any;
   
   // Import behavior options
   invalidRowHandling?: 'include' | 'exclude' | 'block';

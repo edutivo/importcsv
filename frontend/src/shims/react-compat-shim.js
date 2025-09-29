@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 // Export everything from React
-export * from 'react';
+export { forwardRef } from 'react';
 export { default } from 'react';
 
 // Export ReactDOM functions that preact/compat would normally provide

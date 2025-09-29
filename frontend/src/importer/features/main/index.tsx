@@ -13,6 +13,7 @@ import { ColumnMapping, ColumnMappingDictionary } from "../../../types";
 import useStepNavigation, { StepEnum } from "./hooks/useStepNavigation";
 import { FileData, FileRow } from "./types";
 import Complete from "../complete";
+import Processing from "../processing";
 import { cn } from "../../../utils/cn";
 import ConfigureImport from "../configure-import";
 import Uploader from "../uploader";
@@ -53,15 +54,15 @@ export default function Main(props: CSVImporterProps) {
     backendUrl,
     user,
     metadata,
-    demoData
+    demoData,
+    customProcessing
   } = props;
   const skipHeader = skipHeaderRowSelection ?? false;
   const isDemoMode = !!demoData;
   const isStandaloneMode = !importerKey; // Standalone if no importerKey
   
   // Get the API URL (defaults to production API if not provided)
-  const apiUrl = getApiBaseUrl(backendUrl);
-
+  const apiUrl = backendUrl && getApiBaseUrl(backendUrl);
   const { t } = useTranslation();
 
   // Apply custom styles
@@ -259,7 +260,7 @@ export default function Main(props: CSVImporterProps) {
     // TODO (client-sdk): Have the importer continue where left off if closed
     // Temporary solution to reload state if closed and opened again
     // Don't reload in demo mode - let the demo data load
-    if (!isDemoMode && data.rows.length === 0 && currentStep !== StepEnum.Upload) {
+    if (!isDemoMode && data.rows.length === 0 && !(currentStep == StepEnum.Upload || currentStep == StepEnum.Complete)) {
       reload();
     }
   }, [data, isDemoMode]);
@@ -287,6 +288,7 @@ export default function Main(props: CSVImporterProps) {
     // Update data with validated values
     setData(validatedData);
     setIsSubmitting(true);
+    goNext(); // Go to processing
 
     // TODO (client-sdk): Move this type, add other data attributes (i.e. column definitions), and move the data processing to a function
     type MappedRow = {
@@ -333,21 +335,32 @@ export default function Main(props: CSVImporterProps) {
       // For standalone mode, preserve the original row structure with values array
       // This ensures compatibility with examples that expect rows with values
       const standaloneData = validatedData.rows.slice(startIndex);
-      
-      onComplete && onComplete({
-        success: true,
-        data: standaloneData,  // Send rows with values array intact
-        mappedData: mappedRows,  // Also include mapped data for compatibility
-        num_rows: mappedRows.length,
-        num_columns: includedColumns.length,
-        headers: headerRow.values,
-        columnMapping: columnMapping
-      });
-      setIsSubmitting(false);
-      goNext();
+
+
+      if (onComplete) {
+        Promise.all([onComplete({
+          success: true,
+          data: standaloneData,  // Send rows with values array intact
+          mappedData: mappedRows,  // Also include mapped data for compatibility
+          num_rows: mappedRows.length,
+          num_columns: includedColumns.length,
+          headers: headerRow.values,
+          columnMapping: columnMapping
+        })]).then((completeData: any) => {
+          setIsSubmitting(false);
+          goNext(5);
+        }, (errorData: any) => {
+          setIsSubmitting(false);
+          goNext(3);
+        });
+
+      } else {
+        setIsSubmitting(false);
+        goNext(); // From processing to complete
+      }
       return;
     }
-    
+
     // Backend mode: send to API
     if (!importerKey) {
       setDataError("ImporterKey is required for backend mode.");
@@ -430,10 +443,14 @@ export default function Main(props: CSVImporterProps) {
             num_rows: mappedRows.length,
             num_columns: includedColumns.length,
           });
+
+          // goBack(); // Back from processing
+
+        
       });
 
     setIsSubmitting(false);
-    goNext();
+    //goNext(); // From processing to complete
   };
 
   const handleBackToMapColumns = () => {
@@ -572,6 +589,8 @@ export default function Main(props: CSVImporterProps) {
             disableOnInvalidRows={disableOnInvalidRows}
           />
         );
+      case StepEnum.Processing:
+        return <Processing customProcessing={customProcessing} />;
       case StepEnum.Complete:
         return <Complete reload={reload} close={requestClose} isModal={isModal} />;
       default:

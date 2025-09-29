@@ -8,7 +8,8 @@ export const StepEnum = {
   RowSelection: 1, // Deprecated - kept for backwards compatibility
   MapColumns: 2,    // Now uses ConfigureImport component
   Validation: 3,
-  Complete: 4,
+  Processing: 4,
+  Complete: 5,
 };
 
 const calculateNextStep = (nextStep: number, skipHeader: boolean) => {
@@ -24,6 +25,7 @@ const getStepConfig = (skipHeader: boolean) => {
     { label: "Upload", id: 0 },
     { label: "Configure", id: 1 },
     { label: "Validation", id: 2 },
+    { label: "Processing", id: 3 },
   ];
 };
 
@@ -36,7 +38,8 @@ function useStepNavigation(initialStep: number, skipHeader: boolean, isDemoMode:
   // Map initial step to stepper index
   const initialStepperIndex = initialStep === StepEnum.MapColumns ? 1 : 
                              initialStep === StepEnum.Validation ? 2 : 
-                             initialStep === StepEnum.Complete ? 3 : 0;
+                             initialStep === StepEnum.Processing ? 3 : 
+                             initialStep === StepEnum.Complete ? 4 : 0;
   const stepper = useStepper(translatedSteps, initialStepperIndex, skipHeader);
   // Don't use localStorage in demo mode - use a dummy state instead
   const localStorageResult = isDemoMode ? 
@@ -63,7 +66,8 @@ function useStepNavigation(initialStep: number, skipHeader: boolean, isDemoMode:
     const stepperIndex = newStep === StepEnum.Upload ? 0 : 
                         newStep === StepEnum.MapColumns ? 1 : 
                         newStep === StepEnum.Validation ? 2 : 
-                        newStep === StepEnum.Complete ? 3 : newStep;
+                        newStep === StepEnum.Processing ? 3 : 
+                        newStep === StepEnum.Complete ? 4 : newStep;
     stepper.setCurrent(stepperIndex);
   };
 
@@ -77,7 +81,8 @@ function useStepNavigation(initialStep: number, skipHeader: boolean, isDemoMode:
     const stepperIndex = step === StepEnum.Upload ? 0 : 
                         step === StepEnum.MapColumns ? 1 : 
                         step === StepEnum.Validation ? 2 : 
-                        step === StepEnum.Complete ? 3 : step;
+                        step === StepEnum.Processing ? 3 : 
+                        step === StepEnum.Complete ? 4 : step;
     stepper.setCurrent(stepperIndex);
     setCurrentStep(step);
   }, [storageStep, isDemoMode]);

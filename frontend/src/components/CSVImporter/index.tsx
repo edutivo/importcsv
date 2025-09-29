@@ -39,6 +39,7 @@ const CSVImporter = forwardRef((importerProps: CSVImporterProps, forwardRef?: an
     metadata,
     demoData,
     columns,
+    customProcessing,
     // Any remaining props will be valid DOM props
     ...domProps
   } = importerProps;
@@ -123,6 +124,7 @@ const CSVImporter = forwardRef((importerProps: CSVImporterProps, forwardRef?: an
         metadata={metadata}
         demoData={demoData}
         columns={columns}
+        customProcessing={customProcessing}
       />
     </Providers>
   );

@@ -1,18 +1,21 @@
 // Removed i18next and react-i18next dependencies
 // Keeping a dummy i18n implementation to maintain compatibility
+import pt from './pt';
 
 const dummyI18n = {
   // Placeholder implementation
   t: (key: string, options?: any) => {
-    // For keys with replacement patterns like '{{value}}'
+    let result = key;
+    result = (pt as any)[key] || key;
     if (options) {
-      let result = key;
+    
       Object.entries(options).forEach(([k, v]) => {
         result = result.replace(new RegExp(`{{${k}}}`, 'g'), String(v));
       });
+
       return result;
     }
-    return key;
+    return result;
   },
   // No-op change language function
   changeLanguage: () => Promise.resolve(),

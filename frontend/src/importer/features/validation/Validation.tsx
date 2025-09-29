@@ -13,6 +13,7 @@ import { applyTransformations, categorizeTransformations } from '../../../valida
 import VirtualTable from '../../components/VirtualTable';
 import { designTokens } from '../../theme';
 import { cn } from '../../../utils/cn';
+import useTranslation from '../../../i18n/useTranslation';
 
 
 // Validation component for checking imported data
@@ -35,6 +36,7 @@ export default function Validation({
   const [isTransformPanelOpen, setIsTransformPanelOpen] = useState(false);
   const [validationProgress, setValidationProgress] = useState(100);
   const [isValidating, setIsValidating] = useState(false);
+  const {t} = useTranslation();
 
   // Ref for scrollable section to reset scroll position
   const scrollableSectionRef = useRef<HTMLDivElement>(null);
@@ -349,7 +351,7 @@ export default function Validation({
         disabled={isSubmitting}
         size="default"
       >
-        Back
+        {t('Back')}
       </Button>
       <Button
         type="submit"
@@ -359,7 +361,7 @@ export default function Validation({
         variant="default"
         onClick={handleSubmit}
       >
-        {isValidating ? 'Validating...' : 'Submit'}
+        {isValidating ? t('Validating...') : t('Submit')}
       </Button>
     </>
   );
@@ -408,7 +410,7 @@ export default function Validation({
                 )}
                 onClick={() => setFilterMode('all')}
               >
-                All <span className={cn("ml-2 px-2 py-0.5 rounded-full", designTokens.typography.caption, filterMode === 'all' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200')}>{dataRows.length}</span>
+                {t("All")} <span className={cn("ml-2 px-2 py-0.5 rounded-full", designTokens.typography.caption, filterMode === 'all' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200')}>{dataRows.length}</span>
               </button>
               <button
                 type="button"
@@ -421,7 +423,7 @@ export default function Validation({
                 )}
                 onClick={() => setFilterMode('valid')}
               >
-                Valid <span className={cn("ml-2 px-2 py-0.5 rounded-full", designTokens.typography.caption, filterMode === 'valid' ? 'bg-green-100 text-green-700' : 'bg-green-100 text-green-700')}>{validCount}</span>
+                {t("Valid")} <span className={cn("ml-2 px-2 py-0.5 rounded-full", designTokens.typography.caption, filterMode === 'valid' ? 'bg-green-100 text-green-700' : 'bg-green-100 text-green-700')}>{validCount}</span>
               </button>
               <button
                 type="button"
@@ -434,7 +436,7 @@ export default function Validation({
                 )}
                 onClick={() => setFilterMode('error')}
               >
-                Error <span className={cn("ml-2 px-2 py-0.5 rounded-full", designTokens.typography.caption, filterMode === 'error' ? 'bg-red-100 text-red-700' : 'bg-red-100 text-red-700')}>{errorCount}</span>
+                {t("Error")} <span className={cn("ml-2 px-2 py-0.5 rounded-full", designTokens.typography.caption, filterMode === 'error' ? 'bg-red-100 text-red-700' : 'bg-red-100 text-red-700')}>{errorCount}</span>
               </button>
             </div>
             <div className="flex items-center space-x-2">
@@ -461,8 +463,8 @@ export default function Validation({
 
   return (
     <StepLayout
-      title="Validate Data"
-      subtitle="Review and correct any errors in your data before importing."
+      title={t("Validate Data")}
+      subtitle={t("Review and correct any errors in your data before importing.")}
       headerContent={headerContent}
       footerContent={footerContent}
       contentClassName="px-6 py-4 overflow-hidden relative"

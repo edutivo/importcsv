@@ -148,7 +148,11 @@ EMP005,Michael Brown,michael.brown@example.com,HR,55000,2023-06-01,(555) 222-111
     window.URL.revokeObjectURL(url);
   };
 
-  const handleComplete = (importedData: any) => {
+  const handleComplete = async (importedData: any) => {
+    console.log(" Processing... ");
+    const p = new Promise(resolve => setTimeout(resolve, 5000));
+    await p;
+
     console.log('Import completed:', importedData);
 
     // Handle the standalone mode data structure

@@ -47,8 +47,23 @@ export default function DarkModeExample() {
   const [isOpen, setIsOpen] = useState(false);
   const [importedData, setImportedData] = useState<any>(null);
 
-  const handleComplete = (data: any) => {
-    setIsOpen(false);
+  function CustomProcessing() {
+  return (
+    <div className="flex items-center justify-center h-full">
+      Aguarde...
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
+    </div>
+  );
+}
+
+  const handleComplete = async (data: any) => {
+    console.log(" Processing... ");
+    const p = new Promise(resolve => setTimeout(resolve, 5000));
+    await p;
+
+    console.log('Import completed:', importedData);
+
+    //setIsOpen(false);
     setImportedData(data);
     console.log('Import completed:', data);
   };
@@ -180,8 +195,9 @@ Charlie Brown,charlie.b@example.com,Finance,Financial Analyst,2023-05-12`;
           onComplete={handleComplete}
           isModal={true}
           modalIsOpen={isOpen}
+          customProcessing={<><CustomProcessing /></>}
           modalOnCloseTriggered={() => setIsOpen(false)}
-          modalCloseOnOutsideClick={true}
+          modalCloseOnOutsideClick={false}
           {...getThemeConfig()}
         />
       )}

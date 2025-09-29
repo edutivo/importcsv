@@ -1,5 +1,5 @@
 {
-  "name": "@edutivogh/importcsv",
+  "name": "@edutivo/importcsv",
   "version": "0.2.14",
   "description": "AI-powered CSV importer for React. Smart column mapping with OpenAI, natural language transformations. Self-hosted.",
   "main": "build/react/index.js",

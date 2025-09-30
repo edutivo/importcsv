@@ -62,6 +62,7 @@ function useStepNavigation(initialStep: number, skipHeader: boolean, isDemoMode:
   const setStep = (newStep: number) => {
     setCurrentStep(newStep);
     setStorageStep(newStep);
+    
     // Map the step to the correct stepper index
     const stepperIndex = newStep === StepEnum.Upload ? 0 : 
                         newStep === StepEnum.MapColumns ? 1 : 
@@ -88,7 +89,7 @@ function useStepNavigation(initialStep: number, skipHeader: boolean, isDemoMode:
   }, [storageStep, isDemoMode]);
 
   return {
-    currentStep: isDemoMode ? currentStep : (storageStep ?? currentStep),
+    currentStep: currentStep,
     setStep,
     goBack,
     goNext,

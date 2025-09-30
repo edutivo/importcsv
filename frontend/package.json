@@ -1,6 +1,6 @@
 {
   "name": "@edutivo/importcsv",
-  "version": "0.2.17",
+  "version": "0.2.20",
   "description": "AI-powered CSV importer for React. Smart column mapping with OpenAI, natural language transformations. Self-hosted.",
   "main": "build/react/index.js",
   "module": "build/react/index.esm.js",
@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abhishekray07/importcsv.git"
+    "url": "git+https://github.com/edutivo/importcsv.git"
   },
   "keywords": [
     "csv",

@@ -594,7 +594,7 @@ export default function Main(props: CSVImporterProps) {
       case StepEnum.Complete:
         return <Complete reload={reload} close={requestClose} isModal={isModal} />;
       default:
-        return null;
+        return <>Invalid Step {currentStep}</>;
     }
   };
 

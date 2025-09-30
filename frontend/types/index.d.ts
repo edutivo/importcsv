@@ -143,6 +143,7 @@ export interface CSVImporterProps {
     modalIsOpen?: boolean;
     modalOnCloseTriggered?: () => void;
     modalCloseOnOutsideClick?: boolean;
+    customProcessing?: any;
 }
 
 declare const CSVImporter: React.FC<CSVImporterProps>;
